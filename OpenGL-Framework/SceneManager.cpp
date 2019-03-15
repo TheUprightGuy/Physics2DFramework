@@ -39,11 +39,12 @@ void CSceneManager::Init()
 
 	b2FixtureDef fixtureDef; 
 	//fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 100.0f;
+	fixtureDef.density = 1.0f;
 	fixtureDef.friction = 0.3f;
+	fixtureDef.restitution = 0.5f;
 	//body->CreateFixture(&fixtureDef);
 
-	PhysicsObject = new CBox2DObject(world, BOX, fixtureDef, true, { 50.0f, 50.0f }, { 10.0f, 10.0f });
+	PhysicsObject = new CBox2DObject(world, BOX, fixtureDef, true, { 50.0f, 50.0f }, { 2.0f, 2.0f });
 	GroundPhysicsObject = new CBox2DObject(world, BOX, fixtureDef, false, { 50.0f, 0.0f }, { 100.0f, 1.0f });;
 }
 
@@ -62,9 +63,9 @@ void CSceneManager::Process()
 	PhysicsObject->Process();
 	GroundPhysicsObject->Process();
 
-	world->Step(timeStep, velocityIterations, positionIterations);
-
+	
 	glm::vec3 mousePoint = CInput::GetInstance().GetMousePos();
+	static glm::vec3 mouseonPress;
 
 	float fWidth = (GLfloat)glutGet(GLUT_WINDOW_WIDTH);
 	float fHeight = (GLfloat)glutGet(GLUT_WINDOW_HEIGHT);
@@ -73,24 +74,41 @@ void CSceneManager::Process()
 	mousePoint.y = mousePoint.y / (fHeight / 100);
 	mousePoint.y = 100 - mousePoint.y; // :)
 
-	glm::vec3 distancetoObject;
-	
-	b2Vec2 force;
+	glm::vec3 forceApplied;;
+	glm::vec3 directiontoObject;
+	float distance = 0.0f;
 	static bool fire = false;
+	static bool setMouse = false;
 
-	if (CInput::GetInstance().GetMouseState(0) == INPUT_HOLD)
+
+	if (CInput::GetInstance().GetMouseState(0) == INPUT_HOLD && !setMouse)
 	{
-		distancetoObject = glm::vec3((float)(PhysicsObject->GetPos().x), (float)(PhysicsObject->GetPos().y), 0.0f) - mousePoint;
-		glm::vec3 direction = glm::normalize(direction);
-		direction = direction * 2000.0f;
-		force = { direction.x, direction.y };
+		mouseonPress = mousePoint;
+		setMouse = true;
+	}
+	else if (CInput::GetInstance().GetMouseState(0) == INPUT_HOLD && setMouse)
+	{
+		PhysicsObject->SetPos({ mouseonPress.x, mouseonPress.y });
 		fire = true;
 	}
-	if (CInput::GetInstance().GetMouseState(0) == INPUT_RELEASE && fire)
+
+	distance = glm::distance(mousePoint, mouseonPress);
+	directiontoObject = mouseonPress - mousePoint;
+	if (CInput::GetInstance().GetMouseState(0) == INPUT_RELEASE && fire && distance > 0.5f && (directiontoObject.x &&  directiontoObject.y > 0.0f))
 	{
 
+		directiontoObject = mouseonPress - mousePoint;
+		glm::vec3 direction = glm::normalize(directiontoObject);
+
+		float fForce = (200.0f * distance);
+		forceApplied = direction * fForce ;
+
+		PhysicsObject->GetBody()->ApplyLinearImpulse({ forceApplied.x, forceApplied.y}, PhysicsObject->GetBody()->GetPosition(), true);
 		fire = false;
+		setMouse = false;
 	}
+
+	world->Step(timeStep, velocityIterations, positionIterations);
 
 }
 
