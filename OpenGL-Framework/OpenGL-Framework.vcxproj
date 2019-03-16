@@ -140,6 +140,7 @@
     <ClCompile Include="Box2DObject.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ProgramManager.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="CubeMesh.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="Box2DObject.h" />

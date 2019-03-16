@@ -17,6 +17,7 @@
 #include "ProgramManager.h"
 #include "CameraManager.h"
 #include "Box2DObject.h"
+#include "game.h"
 
 struct Scene
 {
@@ -56,15 +57,17 @@ private:
 	//Global Camera
 	CCamera* m_pCamera;
 
-	CObject* mySprite;
-	CObject* otherSprite;
-	//Playing with physics
-	b2World* world;
-	b2Body* groundBody;
-	b2Body* body;
+	//CObject* mySprite;
+	//CObject* otherSprite;
+	////Playing with physics
+	//b2World* world;
+	//b2Body* groundBody;
+	//b2Body* body;
 
-	CBox2DObject* PhysicsObject;
-	CBox2DObject* GroundPhysicsObject;
+	//CBox2DObject* PhysicsObject;
+	//CBox2DObject* GroundPhysicsObject;
+
+	CGame* m_mainGame;
 };
 
 #endif // !__SCENEMANAGER_H__

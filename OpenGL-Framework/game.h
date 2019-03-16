@@ -1,0 +1,34 @@
+#ifndef __GAME_H__
+#define __GAME_H__
+#include "Box2DObject.h"
+#include "utils.h"
+#include "input.h"
+#include "Dependencies/Box2D/Box2D.h"
+#include "CameraManager.h"
+
+class CGame
+{
+public:
+	CGame();
+	~CGame();
+
+	void Init();
+	void Process();
+	void Render();
+
+	glm::vec3 GetMouse();
+	b2Vec2 GetSlingForce(glm::vec3 _pointA, glm::vec3 _pointB, float _springRetension);
+	
+private:
+	b2World * m_world;
+
+	const b2Vec2 slingFromPoint = { 20.0f, 10.0f };
+	std::vector<CBox2DObject*> m_boundsObjects;
+
+	CObject * m_slingShotObjectBack;
+	CObject * m_slingShotObjectFront;
+	CBox2DObject * ThrownObj;
+	CBox2DObject * GroundPhysicsObject;
+};
+
+#endif

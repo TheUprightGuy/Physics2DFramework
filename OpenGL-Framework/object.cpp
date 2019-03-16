@@ -12,6 +12,7 @@ CObject::CObject(GLuint &_program, std::string _imgFilepath, MeshType _meshtype)
 	m_RotAxis = glm::vec3(0.0f, 0.0f, 1.0f);
 	m_RotationDegrees = 0.0f;
 	/**************************************************/
+
 	glGenTextures(1, &m_texture);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 
@@ -23,6 +24,7 @@ CObject::CObject(GLuint &_program, std::string _imgFilepath, MeshType _meshtype)
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
 	/*************************************************/
 }
 
@@ -48,6 +50,7 @@ void CObject::Init(GLuint &_program, std::string _imgFilepath, MeshType _meshtyp
 	m_MeshType = _meshtype;
 
 	/**************************************************/
+
 	glGenTextures(1, &m_texture);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 
@@ -69,18 +72,16 @@ void CObject::Render(CCamera* _pCamera)
 	glCullFace(GL_BACK); // Cull the Back faces
 	glFrontFace(GL_CW); // Front face is Clockwise order
 
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_BLEND);
 
+	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-	//Translate matrix
+	/************************************///Translate matrix
 	glm::mat4 translate = glm::translate(glm::mat4(), m_objPosition); 
 
 	/************************************///Rotation Matrix
-	glm::vec3 rotAxis = glm::vec3(0.0f, 0.0f, 1.0f);
 	glm::mat4 rotation = glm::rotate(glm::mat4(), glm::radians(m_RotationDegrees), m_RotAxis);
 
 	/************************************///Scale matrix
@@ -92,11 +93,12 @@ void CObject::Render(CCamera* _pCamera)
 
 	glUniform1f(glGetUniformLocation(m_program, "fEndX"), m_texEndScale.x);
 	glUniform1f(glGetUniformLocation(m_program, "fEndY"), m_texEndScale.y);
-	/********************************/
 
+	/********************************///MVP
 	glm::mat4 Model = translate * rotation * scale;
 	glm::mat4 MVP;
-	/********************************///MVP
+
+	/********************************/
 	if (_pCamera != nullptr)
 	{
 
@@ -117,17 +119,16 @@ void CObject::Render(CCamera* _pCamera)
 		MVP = Model;
 	}
 
-	
-	
-
 	GLint MVPLoc = glGetUniformLocation(m_program, "MVP");
 	glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, glm::value_ptr(MVP));
+
 	/***********************************/
 
 	/***********************************/
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
+
 	glUniform1i(glGetUniformLocation(m_program, "tex"), 0);
 	
 	CMeshManager::GetInstance().RenderMesh(m_MeshType);

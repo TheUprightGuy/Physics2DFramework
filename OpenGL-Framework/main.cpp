@@ -26,9 +26,13 @@ void PassiveMouse(int x, int y);
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 	glutInitWindowPosition(50, 50);
-	glutInitWindowSize(1000, 1000);
+	glutInitWindowSize(1000, 500);
+
+	glutSetOption(GLUT_MULTISAMPLE, 12);
+	glEnable(GL_MULTISAMPLE);
+
 	glutCreateWindow("The Red Room");
 
 	glClearColor(0.0, 0.0, 0.0, 1.0);

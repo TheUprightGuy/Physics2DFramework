@@ -47,6 +47,9 @@
     <Filter Include="Camera\CamManager">
       <UniqueIdentifier>{fc370297-b69d-47b5-8295-98c28009992e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneManager\Scenes">
+      <UniqueIdentifier>{79e8b620-7eb0-446f-ba0f-a2a72648f0a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,6 +93,9 @@
     </ClCompile>
     <ClCompile Include="CameraManager.cpp">
       <Filter>Camera\CamManager</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>SceneManager\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +141,9 @@
     </ClInclude>
     <ClInclude Include="CameraManager.h">
       <Filter>Camera\CamManager</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>SceneManager\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

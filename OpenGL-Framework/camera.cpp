@@ -13,7 +13,7 @@ CCamera::CCamera(bool bIsOrtho)
 	GLfloat fHeight = (GLfloat)glutGet(GLUT_WINDOW_HEIGHT);
 	if (bIsOrtho)
 	{
-		m_Proj = glm::ortho(0.0f, 100.0f, 0.0f, 100.0f);
+		m_Proj = glm::ortho(0.0f, 100.0f, 0.0f, 50.0f);
 	}
 	else
 	{

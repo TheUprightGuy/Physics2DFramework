@@ -1,7 +1,7 @@
 #include "Box2DObject.h"
 
-CBox2DObject::CBox2DObject(b2World *_world, ColliderShape _colliderShape, b2FixtureDef& _fixtureDef, bool _isDynamic, b2Vec2 _initPos, b2Vec2 _initSize)
-	: CObject(CProgrammerManager::GetInstance().GetProgram(DEFAULT), "Resources/RayMan.jpg", MESH_2D_SPRITE),
+CBox2DObject::CBox2DObject(b2World *_world, ColliderShape _colliderShape, b2FixtureDef& _fixtureDef, bool _isDynamic, std::string ObjTexture, b2Vec2 _initPos, b2Vec2 _initSize)
+	: CObject(CProgrammerManager::GetInstance().GetProgram(DEFAULT), ObjTexture, MESH_2D_SPRITE),
 	m_world(_world)
 {
 	b2BodyDef bodyDef;
