@@ -14,13 +14,14 @@ void CGame::Init()
 
 	CBox2DObject* groundObj = new CBox2DObject(m_world, BOX, fixtureDef, false, "Resources/grass.png", { 50.0f, 0.0f }, { 100.0f, 1.0f });
 	CBox2DObject* leftObj = new CBox2DObject(m_world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 0.0f, 50.0f }, { 1.0f, 100.0f });
-	CBox2DObject* topObj = new CBox2DObject(m_world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 50.0f, 100.0f }, { 100.0f, 1.0f });
+	CBox2DObject* topObj = new CBox2DObject(m_world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 50.0f, 50.0f }, { 100.0f, 1.0f });
 	CBox2DObject* rightObj = new CBox2DObject(m_world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 100.0f, 50.0f }, { 1.0f, 100.0f });
 
 	m_boundsObjects.push_back(groundObj);
 	m_boundsObjects.push_back(leftObj);
 	m_boundsObjects.push_back(topObj);
 	m_boundsObjects.push_back(rightObj);
+
 
 	m_slingShotObjectBack = new CObject(CProgrammerManager::GetInstance().GetProgram(DEFAULT), "Resources/slingshotback.png", MESH_2D_SPRITE);
 	m_slingShotObjectBack->Translate({ slingFromPoint.x, 5.0f, 0.0f });
@@ -30,18 +31,43 @@ void CGame::Init()
 	m_slingShotObjectFront->Translate({ slingFromPoint.x, 5.0f, 0.0f });
 	m_slingShotObjectFront->Scale({ 5.0f, 8.0f, 0.0f });
 
+	b2FixtureDef enviroFixture;
+	enviroFixture.density = 5.0f;
+	enviroFixture.friction = 0.5f;
+	enviroFixture.restitution = 0.5f;
+
+	CBox2DObject* tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 88.0f, 18.0f }, { 2.0f, 2.0f });
+	m_LevelObjects.push_back(tempObj);
+	tempObj = nullptr;
+
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 72.0f, 18.0f }, { 2.0f, 2.0f });
+	m_LevelObjects.push_back(tempObj);
+	tempObj = nullptr;
+
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 3.5f }, { 1.5f, 7.0f });
+	m_LevelObjects.push_back(tempObj);
+	tempObj = nullptr;
+
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 15.0f }, { 10.0f, 1.0f });
+	m_LevelObjects.push_back(tempObj);
+	tempObj = nullptr;
+
 	b2FixtureDef thrownObjfixtureDef;
 	thrownObjfixtureDef.density = 50.0f;
 	thrownObjfixtureDef.friction = 0.5f;
 	thrownObjfixtureDef.restitution = 0.5f;
-	ThrownObj = new CBox2DObject(m_world, BOX, thrownObjfixtureDef, true, "Resources/FeelsBadMan.png", slingFromPoint, { 2.0f, 2.0f });
+	ThrownObj = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/FeelsBadMan.png", slingFromPoint, { 2.0f, 2.0f });
 	ThrownObj->GetBody()->SetActive(false);
-
 }
 
 void CGame::Process()
 {
 	for (auto&& x : m_boundsObjects)
+	{
+		x->Process();
+	}
+
+	for (auto&& x : m_LevelObjects)
 	{
 		x->Process();
 	}
@@ -68,7 +94,7 @@ void CGame::Process()
 			dragging)
 		{
 			dragging = false;
-			b2Vec2 slingForce = GetSlingForce({ GetMouse().x, GetMouse().y, 0.0f}, { slingFromPoint.x, slingFromPoint.y, 0.0f }, 10000.0f);
+			b2Vec2 slingForce = GetSlingForce({ GetMouse().x, GetMouse().y, 0.0f}, { slingFromPoint.x, slingFromPoint.y, 0.0f }, 3000.0f);
 			ThrownObj->GetBody()->SetActive(true);
 			ThrownObj->GetBody()->ApplyLinearImpulse(slingForce, ThrownObj->GetBody()->GetPosition(), true);
 			fired = true;
@@ -96,8 +122,13 @@ void CGame::Render()
 		x->Render(CCameraManager::GetInstance().GetOrthoCam());
 	}
 
-	ThrownObj->Render(CCameraManager::GetInstance().GetOrthoCam());
+	for (CBox2DObject* x : m_LevelObjects)
+	{
+		x->Render(CCameraManager::GetInstance().GetOrthoCam());
+	}
 
+
+	ThrownObj->Render(CCameraManager::GetInstance().GetOrthoCam());
 	m_slingShotObjectFront->Render(CCameraManager::GetInstance().GetOrthoCam());
 
 }
