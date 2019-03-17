@@ -54,7 +54,7 @@ void CGame::Init()
 
 	b2FixtureDef thrownObjfixtureDef;
 	thrownObjfixtureDef.density = 50.0f;
-	thrownObjfixtureDef.friction = 0.3f;
+	thrownObjfixtureDef.friction = 0.1f;
 	thrownObjfixtureDef.restitution = 0.5f;
 	ThrownObj = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", slingFromPoint, { 2.0f, 2.0f });
 	ThrownObj->GetBody()->SetActive(false);
