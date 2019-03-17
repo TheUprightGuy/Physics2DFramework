@@ -30,6 +30,7 @@ CBox2DObject::CBox2DObject(b2World *_world, ColliderShape _colliderShape, b2Fixt
 		break;
 	case CIRCLE:
 	{
+		//circleShape.m_p = _initPos;
 		circleShape.m_radius = _initSize.x / 2;
 		_fixtureDef.shape = &circleShape;
 	}

@@ -22,13 +22,14 @@ public:
 private:
 	b2World * m_world;
 
-	const b2Vec2 slingFromPoint = { 20.0f, 10.0f };
+	const b2Vec2 slingFromPoint = { 20.0f, 18.0f };
 	std::vector<CBox2DObject*> m_boundsObjects;
 
 	std::vector<CBox2DObject*> m_LevelObjects;
 
 	CObject * m_slingShotObjectBack;
 	CObject * m_slingShotObjectFront;
+	CObject * m_background;
 	CBox2DObject * ThrownObj;
 	CBox2DObject * GroundPhysicsObject;
 };
