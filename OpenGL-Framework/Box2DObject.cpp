@@ -41,6 +41,7 @@ CBox2DObject::CBox2DObject(b2World *_world, ColliderShape _colliderShape, b2Fixt
 		break;
 	}
 	
+	
 
 	m_objScale = { _initSize.x, _initSize.y, 1.0f };
 

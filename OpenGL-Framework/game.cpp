@@ -14,7 +14,7 @@ CGame::CGame()
 
 void CGame::Init()
 {
-	b2Vec2 gravity(0.0f, -200.0f);
+	b2Vec2 gravity(0.0f, -300.0f);
 
 
 	m_world = new b2World(gravity);
@@ -50,32 +50,36 @@ void CGame::Init()
 	b2FixtureDef enviroFixture;
 	enviroFixture.density = 30.0f;
 	enviroFixture.friction = 0.5f;
-	enviroFixture.restitution = 0.5f;
+	enviroFixture.restitution = 0.0f;
 
 	CBox2DObject* tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 88.0f, 25.0f }, { 2.0f, 2.0f });
 	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
 	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 72.0f, 25.0f }, { 2.0f, 2.0f });
 	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
 	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 12.5f }, { 1.5f, 7.0f });
 	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
 	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 21.0f }, { 10.0f, 1.0f });
 	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
 	b2FixtureDef thrownObjfixtureDef;
 	thrownObjfixtureDef.density = 80.0f;
 	thrownObjfixtureDef.friction = 0.7f;
-	thrownObjfixtureDef.restitution = 0.7f;
+	thrownObjfixtureDef.restitution = 0.2f;
 	ThrownObj = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", slingFromPoint, { 2.0f, 2.0f });
 	ThrownObj->GetBody()->SetActive(false);
 	ThrownObj->SetHealth(999);
@@ -167,11 +171,6 @@ void CGame::Process()
 			std::cout << x->GetHealth() << std::endl;
 		}
 	}
-	ThrownObj->Process();
-	float32 timeStep = 1.0f / 120.0f;
-	int32 velocityIterations = 6;
-	int32 positionIterations = 2;
-	m_world->Step(timeStep, velocityIterations, positionIterations);
 
 	for (int i = 0; i < m_LevelObjects.size(); i++)
 	{
@@ -180,6 +179,20 @@ void CGame::Process()
 			delete m_LevelObjects[i];
 			m_LevelObjects[i] = nullptr;
 			m_LevelObjects.erase(m_LevelObjects.begin() + i);
+		}
+	}
+
+	ThrownObj->Process();
+	float32 timeStep = 1.0f / 120.0f;
+	int32 velocityIterations = 6;
+	int32 positionIterations = 2;
+	m_world->Step(timeStep, velocityIterations, positionIterations);
+
+	for (int i = 0; i < m_LevelObjects.size(); i++)
+	{
+		if (m_LevelObjects[i]->GetHealth() < 2)
+		{
+			m_LevelObjects[i]->ChangeTexture({ 0.5f, 0.0f }, { 0.5f, 1.0f });
 		}
 	}
 
