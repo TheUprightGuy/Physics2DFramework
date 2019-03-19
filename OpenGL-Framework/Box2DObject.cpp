@@ -60,3 +60,9 @@ void CBox2DObject::SetPos(b2Vec2 NewPos)
 	m_objPosition = glm::vec3( NewPos.x, NewPos.y, 0.0f );
 }
 
+CBox2DObject::~CBox2DObject()
+{
+	std::cout << "destroyed" << std::endl;
+	m_world->DestroyBody(m_body);
+}
+

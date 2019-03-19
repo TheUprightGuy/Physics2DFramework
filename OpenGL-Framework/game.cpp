@@ -73,15 +73,17 @@ void CGame::Init()
 	tempObj = nullptr;
 
 	b2FixtureDef thrownObjfixtureDef;
-	thrownObjfixtureDef.density = 50.0f;
-	thrownObjfixtureDef.friction = 0.1f;
+	thrownObjfixtureDef.density = 80.0f;
+	thrownObjfixtureDef.friction = 0.7f;
 	thrownObjfixtureDef.restitution = 0.7f;
 	ThrownObj = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", slingFromPoint, { 2.0f, 2.0f });
 	ThrownObj->GetBody()->SetActive(false);
+	ThrownObj->SetHealth(999);
 }
 
 void CGame::Process()
 {
+
 	for (auto&& x : m_boundsObjects)
 	{
 		x->Process();
@@ -156,15 +158,31 @@ void CGame::Process()
 	
 	if (CInput::GetInstance().GetKeyState('|')  == INPUT_HOLD)
 	{
-		b2Vec2 vel = ThrownObj->GetBody()->GetLinearVelocity();
+	/*	b2Vec2 vel = ThrownObj->GetBody()->GetLinearVelocity();
 		glm::vec3 vel3 = { vel.x, vel.y, 0.0f };
-		std::cout << glm::length(vel3) << std::endl;
+		std::cout << glm::length(vel3) << std::endl;*/
+
+		for (auto&& x : m_LevelObjects)
+		{
+			std::cout << x->GetHealth() << std::endl;
+		}
 	}
 	ThrownObj->Process();
 	float32 timeStep = 1.0f / 120.0f;
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
 	m_world->Step(timeStep, velocityIterations, positionIterations);
+
+	for (int i = 0; i < m_LevelObjects.size(); i++)
+	{
+		if (m_LevelObjects[i]->GetHealth() <= 0)
+		{
+			delete m_LevelObjects[i];
+			m_LevelObjects[i] = nullptr;
+			m_LevelObjects.erase(m_LevelObjects.begin() + i);
+		}
+	}
+
 }
 
 void CGame::Render()
