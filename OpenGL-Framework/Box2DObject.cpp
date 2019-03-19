@@ -2,7 +2,9 @@
 
 CBox2DObject::CBox2DObject(b2World *_world, ColliderShape _colliderShape, b2FixtureDef& _fixtureDef, bool _isDynamic, std::string ObjTexture, b2Vec2 _initPos, b2Vec2 _initSize)
 	: CObject(CProgrammerManager::GetInstance().GetProgram(DEFAULT), ObjTexture, MESH_2D_SPRITE),
-	m_world(_world)
+	m_world(_world),
+	m_Dynamic(_isDynamic),
+	m_iHealth(0)
 {
 	b2BodyDef bodyDef;
 	bodyDef.fixedRotation = false;
@@ -10,7 +12,7 @@ CBox2DObject::CBox2DObject(b2World *_world, ColliderShape _colliderShape, b2Fixt
 	bodyDef.position = _initPos;
 	m_objPosition = { _initPos.x, _initPos.y, 0.0f };
 
-	if (_isDynamic)
+	if (m_Dynamic)
 	{
 		bodyDef.type = b2_dynamicBody;
 	}

@@ -145,6 +145,9 @@
     <ClInclude Include="game.h">
       <Filter>SceneManager\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="ContactListener.h">
+      <Filter>SceneManager\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\FragmentShader.fs">

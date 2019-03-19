@@ -2,6 +2,7 @@
 #ifndef __BOX2DOBJECT_H__
 #define __BOX2DOBJECT_H___
 
+//#include "game.h"
 #include "utils.h"
 #include "object.h"
 #include "ProgramManager.h"
@@ -22,12 +23,19 @@ public:
 
 	void SetPos(b2Vec2 NewPos);
 	b2Vec2 GetPos() { return(m_body->GetPosition()); }
-
+	
+	int GetHealth() { return(m_iHealth); }
+	void SetHealth(int _iHealth) { m_iHealth = _iHealth; }
 	~CBox2DObject();
 
+
+	bool m_Dynamic;
 private:
+
 	b2World* m_world;
 	b2Body* m_body;
 	ColliderShape m_Collider;
+
+	int m_iHealth;
 };
 #endif // !__PHYSICSOBJECT_H__

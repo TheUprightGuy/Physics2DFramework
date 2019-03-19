@@ -1,10 +1,13 @@
 #ifndef __GAME_H__
 #define __GAME_H__
-#include "Box2DObject.h"
+
+#include "Dependencies/Box2D/Box2D.h"
+
+#include "ContactListener.h"
 #include "utils.h"
 #include "input.h"
-#include "Dependencies/Box2D/Box2D.h"
 #include "CameraManager.h"
+#include "Box2DObject.h"
 
 class CGame
 {
@@ -19,12 +22,14 @@ public:
 	glm::vec3 GetMouse();
 	b2Vec2 GetSlingForce(glm::vec3 _pointA, glm::vec3 _pointB, float _springRetension);
 	
+	void ProcessCollisions(b2Contact* _contact);
 private:
 	b2World * m_world;
+	CB2DListener * m_listener;
 
 	const b2Vec2 slingFromPoint = { 20.0f, 18.0f };
-	std::vector<CBox2DObject*> m_boundsObjects;
 
+	std::vector<CBox2DObject*> m_boundsObjects;
 	std::vector<CBox2DObject*> m_LevelObjects;
 
 	CObject * m_slingShotObjectBack;

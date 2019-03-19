@@ -15,7 +15,12 @@ CGame::CGame()
 void CGame::Init()
 {
 	b2Vec2 gravity(0.0f, -200.0f);
+
+
 	m_world = new b2World(gravity);
+	m_listener = new CB2DListener();
+	m_world->SetContactListener(m_listener);
+
 
 	b2FixtureDef fixtureDef;
 
@@ -48,18 +53,22 @@ void CGame::Init()
 	enviroFixture.restitution = 0.5f;
 
 	CBox2DObject* tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 88.0f, 25.0f }, { 2.0f, 2.0f });
+	tempObj->SetHealth(3);
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
 	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 72.0f, 25.0f }, { 2.0f, 2.0f });
+	tempObj->SetHealth(3);
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
 	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 12.5f }, { 1.5f, 7.0f });
+	tempObj->SetHealth(3);
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
 	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 21.0f }, { 10.0f, 1.0f });
+	tempObj->SetHealth(3);
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
@@ -107,7 +116,7 @@ void CGame::Process()
 			dragging)
 		{
 			dragging = false;
-			b2Vec2 slingForce = GetSlingForce({ GetMouse().x, GetMouse().y, 0.0f}, { slingFromPoint.x, slingFromPoint.y, 0.0f }, 5000.0f);
+			b2Vec2 slingForce = GetSlingForce({ GetMouse().x, GetMouse().y, 0.0f}, { slingFromPoint.x, slingFromPoint.y, 0.0f }, 2500.0f);
 			ThrownObj->GetBody()->SetActive(true);
 			ThrownObj->GetBody()->ApplyLinearImpulse(slingForce, ThrownObj->GetBody()->GetPosition(), true);
 			fired = true;
@@ -144,7 +153,13 @@ void CGame::Process()
 		m_world->SetGravity({ 0.0f, -200.0f });
 		currentGrav = GRAVDOWN;
 	}
-
+	
+	if (CInput::GetInstance().GetKeyState('|')  == INPUT_HOLD)
+	{
+		b2Vec2 vel = ThrownObj->GetBody()->GetLinearVelocity();
+		glm::vec3 vel3 = { vel.x, vel.y, 0.0f };
+		std::cout << glm::length(vel3) << std::endl;
+	}
 	ThrownObj->Process();
 	float32 timeStep = 1.0f / 120.0f;
 	int32 velocityIterations = 6;
@@ -203,4 +218,15 @@ b2Vec2 CGame::GetSlingForce(glm::vec3 _pointA, glm::vec3 _pointB, float _springR
 
 	b2Vec2 output = { forceApplied.x, forceApplied.y };
 	return(output);
+}
+
+void CGame::ProcessCollisions(b2Contact* _contact)
+{
+	void * userDataA = _contact->GetFixtureA()->GetBody()->GetUserData();
+	void * userDataB = _contact->GetFixtureB()->GetBody()->GetUserData();
+
+	CBox2DObject* objA = static_cast<CBox2DObject*>(userDataA);
+	CBox2DObject* objB = static_cast<CBox2DObject*>(userDataB);
+
+
 }

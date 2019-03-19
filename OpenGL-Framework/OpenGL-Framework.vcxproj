@@ -156,6 +156,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="ContactListener.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
