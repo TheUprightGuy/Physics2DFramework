@@ -13,6 +13,7 @@ enum ColliderShape
 	BOX,
 	CIRCLE
 };
+
 class CBox2DObject : public CObject
 {
 public:
