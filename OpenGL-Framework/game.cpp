@@ -16,6 +16,11 @@ void CGame::Init()
 {
 	b2Vec2 gravity(0.0f, -300.0f);
 
+	m_audio = new CAudioManager();
+	m_audio->Init();
+
+	m_audio->LoadAudio("Resources/SoundFiles/bird.wav", "bird_sound", FMOD_DEFAULT);
+
 
 	m_world = new b2World(gravity);
 	m_listener = new CB2DListener();
@@ -125,6 +130,8 @@ void CGame::Process()
 			b2Vec2 slingForce = GetSlingForce({ GetMouse().x, GetMouse().y, 0.0f}, { slingFromPoint.x, slingFromPoint.y, 0.0f }, 2500.0f);
 			ThrownObj->GetBody()->SetActive(true);
 			ThrownObj->GetBody()->ApplyLinearImpulse(slingForce, ThrownObj->GetBody()->GetPosition(), true);
+
+			m_audio->PlayAudio("bird_sound");
 			fired = true;
 		}
 		else //Sling snapped

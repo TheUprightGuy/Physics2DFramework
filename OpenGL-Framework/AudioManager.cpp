@@ -15,12 +15,14 @@ bool CAudioManager::Init()
 {
 	FMOD_RESULT result;
 	result = FMOD::System_Create(&m_pAudioMgr);
+
 	if (result != FMOD_OK)
 	{
 		return(false);
 	}
 
 	result = m_pAudioMgr->init(50, FMOD_INIT_NORMAL, 0);
+
 	if (result != FMOD_OK)
 	{
 		return(false);

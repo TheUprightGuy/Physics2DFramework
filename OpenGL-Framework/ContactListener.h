@@ -50,7 +50,7 @@ class CB2DListener : public b2ContactListener
 			{
 				fixtureA->SetHealth(aHealth - 2);
 			}
-			else if (speedB < midBracket && speedB> 100)
+			else if (speedB < lowBracket && speedB> midBracket)
 			{
 				fixtureA->SetHealth(aHealth - 1);
 			}
@@ -59,11 +59,11 @@ class CB2DListener : public b2ContactListener
 			{
 				fixtureA->SetHealth(aHealth - 3);
 			}
-			else if (speedA < topBracket && speedA> midBracket)
+			else if (speedA < topBracket && speedA > midBracket)
 			{
 				fixtureA->SetHealth(aHealth - 2);
 			}
-			else if (speedA < midBracket && speedA> 100)
+			else if (speedA < lowBracket && speedA> 100)
 			{
 				fixtureA->SetHealth(aHealth - 1);
 			}
@@ -80,7 +80,7 @@ class CB2DListener : public b2ContactListener
 			{
 				fixtureB->SetHealth(bHealth - 2);
 			}
-			else if (speedA < midBracket && speedA> 100)
+			else if (speedA < lowBracket && speedA> midBracket)
 			{
 				fixtureB->SetHealth(bHealth - 1);
 			}
@@ -94,7 +94,7 @@ class CB2DListener : public b2ContactListener
 			{
 				fixtureB->SetHealth(bHealth - 2);
 			}
-			else if (speedB < midBracket && speedB> 100)
+			else if (speedB < lowBracket && speedB> midBracket)
 			{
 				fixtureB->SetHealth(bHealth - 1);
 			}
@@ -106,9 +106,9 @@ class CB2DListener : public b2ContactListener
 
 	}
 private:
-	const int topBracket = 150;
-	const int midBracket = 100;
-	const int lowBracket = 50;
+	const int topBracket = 200;
+	const int midBracket = 75;
+	const int lowBracket = 20;
 };
 
 #endif

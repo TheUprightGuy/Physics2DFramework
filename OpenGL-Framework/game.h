@@ -8,6 +8,7 @@
 #include "input.h"
 #include "CameraManager.h"
 #include "Box2DObject.h"
+#include "AudioManager.h"
 
 class CGame
 {
@@ -31,6 +32,8 @@ private:
 
 	std::vector<CBox2DObject*> m_boundsObjects;
 	std::vector<CBox2DObject*> m_LevelObjects;
+
+	CAudioManager* m_audio;
 
 	CObject * m_slingShotObjectBack;
 	CObject * m_slingShotObjectFront;
