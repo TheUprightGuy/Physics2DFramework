@@ -20,7 +20,7 @@ void CGame::Init()
 	m_audio->Init();
 
 	m_audio->LoadAudio("Resources/SoundFiles/bird.wav", "bird_sound", FMOD_DEFAULT);
-
+	m_audio->LoadAudio("Resources/SoundFiles/pigsplat.mp3", "pig_sound", FMOD_DEFAULT);
 
 	m_world = new b2World(gravity);
 	m_listener = new CB2DListener();
@@ -57,34 +57,59 @@ void CGame::Init()
 	enviroFixture.friction = 0.5f;
 	enviroFixture.restitution = 0.0f;
 
-	CBox2DObject* tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 88.0f, 25.0f }, { 2.0f, 2.0f });
+	//Right box
+	CBox2DObject* tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 88.0f, 23.0f }, { 2.0f, 2.0f });
+	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+	m_LevelObjects.push_back(tempObj);
+	tempObj = nullptr;
+	
+	//Left box
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 72.0f, 23.0f }, { 2.0f, 2.0f });
 	tempObj->SetHealth(3);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
-	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 72.0f, 25.0f }, { 2.0f, 2.0f });
+	//Pillar box
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 12.0f }, { 1.5f, 7.0f });
+	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+	m_LevelObjects.push_back(tempObj);
+	tempObj = nullptr;
+	 
+	//Platform Box
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 20.0f }, { 10.0f, 1.0f });
 	tempObj->SetHealth(3);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 	m_LevelObjects.push_back(tempObj);
 	tempObj = nullptr;
 
-	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 12.5f }, { 1.5f, 7.0f });
-	tempObj->SetHealth(3);
-	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
-	m_LevelObjects.push_back(tempObj);
-	tempObj = nullptr;
+	b2FixtureDef PigObjfixtureDef;
+	PigObjfixtureDef.density = 90.0f;
+	PigObjfixtureDef.friction = 0.7f;
+	PigObjfixtureDef.restitution = 0.1f;
 
-	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 21.0f }, { 10.0f, 1.0f });
-	tempObj->SetHealth(3);
-	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
-	m_LevelObjects.push_back(tempObj);
-	tempObj = nullptr;
+	CBox2DObject* PigObj = new CBox2DObject(m_world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", {88.0f, 26.0f}, { 1.8f, 1.8f });
+	PigObj->SetHealth(2);
+	m_pigs.push_back(PigObj);
+	PigObj = nullptr;
+
+	PigObj = new CBox2DObject(m_world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", { 72.0f, 26.0f }, { 1.8f, 1.8f });
+	PigObj->SetHealth(2);
+	m_pigs.push_back(PigObj);
+	PigObj = nullptr;
+
+	PigObj = new CBox2DObject(m_world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", { 80.0f, 22.0f }, { 1.8f, 1.8f });
+	PigObj->SetHealth(2);
+	m_pigs.push_back(PigObj);
+	PigObj = nullptr; 
 
 	b2FixtureDef thrownObjfixtureDef;
 	thrownObjfixtureDef.density = 80.0f;
 	thrownObjfixtureDef.friction = 0.7f;
 	thrownObjfixtureDef.restitution = 0.2f;
+
 	ThrownObj = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", slingFromPoint, { 2.0f, 2.0f });
 	ThrownObj->GetBody()->SetActive(false);
 	ThrownObj->SetHealth(999);
@@ -99,6 +124,10 @@ void CGame::Process()
 	}
 
 	for (auto&& x : m_LevelObjects)
+	{
+		x->Process();
+	}
+	for (auto&& x : m_pigs)
 	{
 		x->Process();
 	}
@@ -167,17 +196,6 @@ void CGame::Process()
 		currentGrav = GRAVDOWN;
 	}
 	
-	if (CInput::GetInstance().GetKeyState('|')  == INPUT_HOLD)
-	{
-	/*	b2Vec2 vel = ThrownObj->GetBody()->GetLinearVelocity();
-		glm::vec3 vel3 = { vel.x, vel.y, 0.0f };
-		std::cout << glm::length(vel3) << std::endl;*/
-
-		for (auto&& x : m_LevelObjects)
-		{
-			std::cout << x->GetHealth() << std::endl;
-		}
-	}
 
 	for (int i = 0; i < m_LevelObjects.size(); i++)
 	{
@@ -186,6 +204,17 @@ void CGame::Process()
 			delete m_LevelObjects[i];
 			m_LevelObjects[i] = nullptr;
 			m_LevelObjects.erase(m_LevelObjects.begin() + i);
+		}
+	}
+
+	for (int i = 0; i < m_pigs.size(); i++)
+	{
+		if (m_pigs[i]->GetHealth() <= 0)
+		{
+			delete m_pigs[i];
+			m_pigs[i] = nullptr;
+			m_pigs.erase(m_pigs.begin() + i);
+			m_audio->PlayAudio("pig_sound");
 		}
 	}
 
@@ -211,6 +240,7 @@ void CGame::Render()
 
 	m_slingShotObjectBack->Render(CCameraManager::GetInstance().GetOrthoCam());
 
+
 	for (CBox2DObject* x: m_boundsObjects)
 	{
 		x->Render(CCameraManager::GetInstance().GetOrthoCam());
@@ -220,7 +250,10 @@ void CGame::Render()
 	{
 		x->Render(CCameraManager::GetInstance().GetOrthoCam());
 	}
-
+	for (CBox2DObject* x : m_pigs)
+	{
+		x->Render(CCameraManager::GetInstance().GetOrthoCam());
+	}
 
 	ThrownObj->Render(CCameraManager::GetInstance().GetOrthoCam());
 	m_slingShotObjectFront->Render(CCameraManager::GetInstance().GetOrthoCam());

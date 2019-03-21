@@ -32,6 +32,7 @@ private:
 
 	std::vector<CBox2DObject*> m_boundsObjects;
 	std::vector<CBox2DObject*> m_LevelObjects;
+	std::vector<CBox2DObject*> m_pigs;
 
 	CAudioManager* m_audio;
 
