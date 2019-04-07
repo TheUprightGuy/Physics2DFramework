@@ -14,10 +14,18 @@ enum ColliderShape
 	CIRCLE
 };
 
+enum BirdType
+{
+	NORMAL,
+	SPLITTER,
+	MINI_SPLITTER,
+	SPEEDER
+};
 class CBox2DObject : public CObject
 {
 public:
 	CBox2DObject(b2World *_world, ColliderShape _colliderShape, b2FixtureDef& _fixtureDef, bool _isDynamic, std::string ObjTexture, b2Vec2 _initPos = { 0.0f, 0.0f }, b2Vec2 _initSize = {1.0f, 1.0f});
+	~CBox2DObject();
 
 	void Process();
 	b2Body* GetBody() { return(m_body); }
@@ -27,8 +35,9 @@ public:
 	
 	int GetHealth() { return(m_iHealth); }
 	void SetHealth(int _iHealth) { m_iHealth = _iHealth; }
-	~CBox2DObject();
-
+	
+	void SetBirdType(BirdType _birdType) { m_birdtype = _birdType; }
+	BirdType GetBirdType() { return(m_birdtype); }
 
 	bool m_Dynamic;
 private:
@@ -37,6 +46,7 @@ private:
 	b2Body* m_body;
 	ColliderShape m_Collider;
 
+	BirdType m_birdtype;
 	int m_iHealth;
 };
 #endif // !__PHYSICSOBJECT_H__

@@ -23,6 +23,7 @@
     <ProjectGuid>{A6DFC928-41A3-4660-898F-7682C031F848}</ProjectGuid>
     <RootNamespace>OpenGLFramework</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <ProjectName>OpenGL-Framework - Physics</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

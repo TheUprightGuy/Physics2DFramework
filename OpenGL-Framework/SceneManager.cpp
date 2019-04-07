@@ -36,12 +36,12 @@ void CSceneManager::Init()
 
 void CSceneManager::Render()
 {
-	m_mainGame->Render();
+	m_mainGame->Render(0);
 }
 
 void CSceneManager::Process()
 {
-	m_mainGame->Process();
+	m_mainGame->Process(0);
 
 }
 

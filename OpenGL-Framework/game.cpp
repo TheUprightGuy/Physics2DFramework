@@ -26,6 +26,7 @@ void CGame::Init()
 	m_listener = new CB2DListener();
 	m_world->SetContactListener(m_listener);
 
+	m_CurrentBird = 0;
 
 	b2FixtureDef fixtureDef;
 
@@ -33,11 +34,14 @@ void CGame::Init()
 	CBox2DObject* leftObj = new CBox2DObject(m_world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { -1.0f, 50.0f }, { 1.0f, 100.0f });
 	CBox2DObject* topObj = new CBox2DObject(m_world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 50.0f, 51.0f }, { 100.0f, 1.0f });
 	CBox2DObject* rightObj = new CBox2DObject(m_world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 101.0f, 50.0f }, { 1.0f, 100.0f });
+	CBox2DObject* barrierObj = new CBox2DObject(m_world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 50.0f, 6.0f }, { 2.0f, 2.0f });
+	barrierObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 
 	m_boundsObjects.push_back(groundObj);
 	m_boundsObjects.push_back(leftObj);
 	m_boundsObjects.push_back(topObj);
 	m_boundsObjects.push_back(rightObj);
+	m_boundsObjects.push_back(barrierObj);
 
 
 	m_slingShotObjectBack = new CObject(CProgrammerManager::GetInstance().GetProgram(DEFAULT), "Resources/slingshotback.png", MESH_2D_SPRITE);
@@ -57,65 +61,115 @@ void CGame::Init()
 	enviroFixture.friction = 0.5f;
 	enviroFixture.restitution = 0.0f;
 
-	//Right box
-	CBox2DObject* tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 88.0f, 23.0f }, { 2.0f, 2.0f });
-	tempObj->SetHealth(3);
-	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
-	m_LevelObjects.push_back(tempObj);
-	tempObj = nullptr;
+	Lvl levelOne;
+
+	b2RevoluteJointDef revoluteJointDef; //Weldjoint
+	revoluteJointDef.collideConnected = false;
 	
-	//Left box
-	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 72.0f, 23.0f }, { 2.0f, 2.0f });
+	//Right box
+	CBox2DObject* tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 90.0f, 20.0f }, { 2.0f, 2.0f });
 	tempObj->SetHealth(3);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
-	m_LevelObjects.push_back(tempObj);
+	levelOne.objects.push_back(tempObj);
+	tempObj = nullptr;
+
+	//Left box
+	enviroFixture.density = 70.0f;
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 70.0f, 20.0f }, { 2.0f, 2.0f });
+	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+	levelOne.objects.push_back(tempObj);
 	tempObj = nullptr;
 
 	//Pillar box
-	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 12.0f }, { 1.5f, 7.0f });
+	enviroFixture.density = 30.0f;
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 10.0f }, { 1.5f, 7.0f });
 	tempObj->SetHealth(3);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
-	m_LevelObjects.push_back(tempObj);
+
+	revoluteJointDef.bodyA = tempObj->GetBody();
+	revoluteJointDef.localAnchorA.Set(0, 5);
+	levelOne.objects.push_back(tempObj);
+
 	tempObj = nullptr;
 	 
 	//Platform Box
-	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 20.0f }, { 10.0f, 1.0f });
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 17.5f }, { 15.0f, 1.0f });
 	tempObj->SetHealth(3);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
-	m_LevelObjects.push_back(tempObj);
+	
+	revoluteJointDef.bodyB = tempObj->GetBody();
+	revoluteJointDef.localAnchorB.Set(0, 0);
+
+	levelOne.objects.push_back(tempObj);
 	tempObj = nullptr;
+
+	levelOne.joints.push_back(m_world->CreateJoint(&revoluteJointDef));
+
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 90.0f, 9.0f }, { 1.5f, 5.5f });
+	tempObj->SetHealth(2);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+	levelOne.objects.push_back(tempObj);
+
+	tempObj = new CBox2DObject(m_world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 70.0f, 9.0f }, { 1.5f, 5.5f });
+	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+	levelOne.objects.push_back(tempObj);
+
+	
+
 
 	b2FixtureDef PigObjfixtureDef;
 	PigObjfixtureDef.density = 90.0f;
 	PigObjfixtureDef.friction = 0.7f;
 	PigObjfixtureDef.restitution = 0.1f;
 
-	CBox2DObject* PigObj = new CBox2DObject(m_world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", {88.0f, 26.0f}, { 1.8f, 1.8f });
+	CBox2DObject* PigObj = new CBox2DObject(m_world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", {86.0f, 19.0f}, { 1.8f, 1.8f });
 	PigObj->SetHealth(2);
-	m_pigs.push_back(PigObj);
+	PigObj->GetBody()->SetActive(false);
+	levelOne.enemies.push_back(PigObj);
 	PigObj = nullptr;
 
-	PigObj = new CBox2DObject(m_world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", { 72.0f, 26.0f }, { 1.8f, 1.8f });
+	PigObj = new CBox2DObject(m_world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", { 74.0f, 19.0f }, { 1.8f, 1.8f });
 	PigObj->SetHealth(2);
-	m_pigs.push_back(PigObj);
+	PigObj->GetBody()->SetActive(false);
+	levelOne.enemies.push_back(PigObj);
 	PigObj = nullptr;
 
-	PigObj = new CBox2DObject(m_world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", { 80.0f, 22.0f }, { 1.8f, 1.8f });
+	PigObj = new CBox2DObject(m_world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", { 80.0f, 20.0f }, { 1.8f, 1.8f });
 	PigObj->SetHealth(2);
-	m_pigs.push_back(PigObj);
+	PigObj->GetBody()->SetActive(false);
+	levelOne.enemies.push_back(PigObj);
 	PigObj = nullptr; 
 
 	b2FixtureDef thrownObjfixtureDef;
 	thrownObjfixtureDef.density = 80.0f;
-	thrownObjfixtureDef.friction = 0.7f;
+	thrownObjfixtureDef.friction = 1.0f;
 	thrownObjfixtureDef.restitution = 0.2f;
 
-	ThrownObj = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", slingFromPoint, { 2.0f, 2.0f });
-	ThrownObj->GetBody()->SetActive(false);
-	ThrownObj->SetHealth(999);
+	CBox2DObject* bird = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", slingFromPoint, { 2.0f, 2.0f });
+	bird->GetBody()->SetActive(false);
+	bird->SetHealth(999);
+	bird->SetBirdType(NORMAL);
+	levelOne.birds.push_back(bird);
+
+	bird = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", {16.0f, 6.5f}, { 2.0f, 2.0f });
+	bird->GetBody()->SetActive(false);
+	bird->SetHealth(999);
+	bird->SetBirdType(SPLITTER);
+	levelOne.birds.push_back(bird);
+
+	bird = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", { 12.0f, 6.5f }, { 2.0f, 2.0f });
+	bird->GetBody()->SetActive(false);
+	bird->SetHealth(999);
+	bird->SetBirdType(SPEEDER);
+	levelOne.birds.push_back(bird);
+
+	m_levels.push_back(levelOne);
+
 }
 
-void CGame::Process()
+void CGame::Process(int levelNum)
 {
 
 	for (auto&& x : m_boundsObjects)
@@ -123,19 +177,21 @@ void CGame::Process()
 		x->Process();
 	}
 
-	for (auto&& x : m_LevelObjects)
+	for (auto&& x : m_levels[levelNum].objects)
 	{
 		x->Process();
 	}
-	for (auto&& x : m_pigs)
+	for (auto&& x : m_levels[levelNum].enemies)
+	{
+		x->Process();
+	}
+	for (auto&& x : m_levels[levelNum].birds)
 	{
 		x->Process();
 	}
 
 	static bool dragging = false;
 	static bool fired = false;
-
-
 
 	if (!fired)
 	{
@@ -150,112 +206,150 @@ void CGame::Process()
 			CInput::GetInstance().GetMouseState(0) == INPUT_HOLD &&
 			dragging)
 		{
-			ThrownObj->SetPos({GetMouse().x, GetMouse().y});
+			m_levels[levelNum].birds[m_CurrentBird]->SetPos({GetMouse().x, GetMouse().y});
 		}
 		else if ((distancefromsling <= 25.0f) && //Being fired
 			dragging)
 		{
 			dragging = false;
-			b2Vec2 slingForce = GetSlingForce({ GetMouse().x, GetMouse().y, 0.0f}, { slingFromPoint.x, slingFromPoint.y, 0.0f }, 2500.0f);
-			ThrownObj->GetBody()->SetActive(true);
-			ThrownObj->GetBody()->ApplyLinearImpulse(slingForce, ThrownObj->GetBody()->GetPosition(), true);
+			for (auto&& x : m_levels[levelNum].enemies)
+			{
+				x->GetBody()->SetActive(true);
+			}
+
+			b2Vec2 slingForce = GetSlingForce({ GetMouse().x, GetMouse().y, 0.0f}, { slingFromPoint.x, slingFromPoint.y, 0.0f }, 2000.0f);
+			m_levels[levelNum].birds[m_CurrentBird]->GetBody()->SetActive(true);
+			m_levels[levelNum].birds[m_CurrentBird]->GetBody()->ApplyLinearImpulse(slingForce, m_levels[levelNum].birds[m_CurrentBird]->GetPos(), true);
 
 			m_audio->PlayAudio("bird_sound");
 			fired = true;
 		}
 		else //Sling snapped
 		{
-
-			ThrownObj->SetPos(slingFromPoint);
+			m_levels[levelNum].birds[m_CurrentBird]->SetPos(slingFromPoint);
 			dragging = false;
 		}
 	}
+	else
+	{
+		static bool birdAbility = false;
+		b2Vec2 vel = m_levels[levelNum].birds[m_CurrentBird]->GetBody()->GetLinearVelocity();
+		glm::vec3 vel3 = { vel.x, vel.y, 0.0f };
+		float speed = glm::length(vel3);
 
-	if (CInput::GetInstance().GetKeyState('r') == INPUT_HOLD)
-	{
-		ThrownObj->GetBody()->SetTransform(slingFromPoint, 0.0f);
-		ThrownObj->GetBody()->SetActive(false);
-		fired = false;
-	}
-
-	static GravSet currentGrav = GRAVDOWN;
-	
-	if (CInput::GetInstance().GetKeyState('t') == INPUT_HOLD && currentGrav != GRAVUP)
-	{
-		m_world->SetGravity({ 0.0f, 200.0f });
-		currentGrav = GRAVUP;
-	}
-	else if (CInput::GetInstance().GetKeyState('g') == INPUT_HOLD && currentGrav != GRAVNONE)
-	{
-		m_world->SetGravity({ 0.0f, 0.0f });
-		currentGrav = GRAVNONE;
-	}
-	else if (CInput::GetInstance().GetKeyState('b') == INPUT_HOLD && currentGrav != GRAVDOWN)
-	{
-		m_world->SetGravity({ 0.0f, -200.0f });
-		currentGrav = GRAVDOWN;
-	}
-	
-
-	for (int i = 0; i < m_LevelObjects.size(); i++)
-	{
-		if (m_LevelObjects[i]->GetHealth() <= 0)
+		if (speed < 10.0f && m_CurrentBird < m_levels[levelNum].birds.size() - 1)
 		{
-			delete m_LevelObjects[i];
-			m_LevelObjects[i] = nullptr;
-			m_LevelObjects.erase(m_LevelObjects.begin() + i);
+			m_CurrentBird++;
+
+			while (m_levels[levelNum].birds[m_CurrentBird]->GetBirdType() == MINI_SPLITTER)
+			{
+				m_CurrentBird++;
+			}
+
+			m_levels[levelNum].birds[m_CurrentBird]->SetPos(slingFromPoint);
+			fired = false;
+			birdAbility = false;
+		}
+
+		if (CInput::GetInstance().GetMouseState(0) == INPUT_HOLD && !birdAbility && m_levels[levelNum].birds[m_CurrentBird]->GetBirdType() == SPEEDER)
+		{
+			b2Vec2 slingForce = GetSlingForce({ GetMouse().x, GetMouse().y, 0.0f }, { m_levels[levelNum].birds[m_CurrentBird]->GetPos().x, m_levels[levelNum].birds[m_CurrentBird]->GetPos().y, 0.0f }, 3000.0f);
+			m_levels[levelNum].birds[m_CurrentBird]->GetBody()->ApplyLinearImpulse(-slingForce, m_levels[levelNum].birds[m_CurrentBird]->GetPos(), true);
+
+
+			birdAbility = true;
+		}
+		if (CInput::GetInstance().GetMouseState(0) == INPUT_HOLD && !birdAbility && m_levels[levelNum].birds[m_CurrentBird]->GetBirdType() == SPLITTER)
+		{
+			birdAbility = true;
+
+			b2FixtureDef thrownObjfixtureDef;
+			thrownObjfixtureDef.density = 50.0f;
+			thrownObjfixtureDef.friction = 0.7f;
+			thrownObjfixtureDef.restitution = 0.2f;
+
+			b2Vec2 pos = m_levels[levelNum].birds[m_CurrentBird]->GetPos();
+			CBox2DObject* bird1 = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", { pos.x, pos.y + 5.0f }, { 1.5f, 1.5f });
+			bird1->GetBody()->SetLinearVelocity(m_levels[levelNum].birds[m_CurrentBird]->GetBody()->GetLinearVelocity());
+			bird1->SetHealth(999);
+			bird1->SetBirdType(MINI_SPLITTER);
+
+			CBox2DObject* bird2 = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", { pos.x, pos.y }, { 1.5f, 1.5f });
+			bird2->GetBody()->SetLinearVelocity(m_levels[levelNum].birds[m_CurrentBird]->GetBody()->GetLinearVelocity());
+			bird2->SetHealth(999);
+			bird2->SetBirdType(MINI_SPLITTER);
+			CBox2DObject* bird3 = new CBox2DObject(m_world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", { pos.x, pos.y - 5.0f }, { 1.5f, 1.5f });
+			bird3->GetBody()->SetLinearVelocity(m_levels[levelNum].birds[m_CurrentBird]->GetBody()->GetLinearVelocity());
+			bird3->SetHealth(999);
+			bird3->SetBirdType(MINI_SPLITTER);
+
+			delete m_levels[levelNum].birds[m_CurrentBird];
+			m_levels[levelNum].birds[m_CurrentBird] = nullptr;
+			m_levels[levelNum].birds.erase(m_levels[levelNum].birds.begin() + m_CurrentBird);
+
+			m_levels[levelNum].birds.insert(m_levels[levelNum].birds.begin() + m_CurrentBird, bird1);
+			m_levels[levelNum].birds.insert(m_levels[levelNum].birds.begin() + m_CurrentBird, bird2);
+			m_levels[levelNum].birds.insert(m_levels[levelNum].birds.begin() + m_CurrentBird, bird3);
 		}
 	}
 
-	for (int i = 0; i < m_pigs.size(); i++)
+	for (int i = 0; i < m_levels[levelNum].objects.size(); i++)
 	{
-		if (m_pigs[i]->GetHealth() <= 0)
+		if (m_levels[levelNum].objects[i]->GetHealth() <= 0)
 		{
-			delete m_pigs[i];
-			m_pigs[i] = nullptr;
-			m_pigs.erase(m_pigs.begin() + i);
+			delete m_levels[levelNum].objects[i];
+			m_levels[levelNum].objects[i] = nullptr;
+			m_levels[levelNum].objects.erase(m_levels[levelNum].objects.begin() + i);
+		}
+	}
+
+	for (auto & object : m_levels[levelNum].objects)
+	{
+		if (object->GetHealth() < 2)
+		{
+			object->ChangeTexture({ 0.5f, 0.0f }, { 0.5f, 1.0f });
+		}
+	}
+	for (int i = 0; i < m_levels[levelNum].enemies.size(); i++)
+	{
+		if (m_levels[levelNum].enemies[i]->GetHealth() <= 0)
+		{
+			delete m_levels[levelNum].enemies[i];
+			m_levels[levelNum].enemies[i] = nullptr;
+			m_levels[levelNum].enemies.erase(m_levels[levelNum].enemies.begin() + i);
 			m_audio->PlayAudio("pig_sound");
 		}
 	}
 
-	ThrownObj->Process();
 	float32 timeStep = 1.0f / 120.0f;
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
 	m_world->Step(timeStep, velocityIterations, positionIterations);
-
-	for (int i = 0; i < m_LevelObjects.size(); i++)
-	{
-		if (m_LevelObjects[i]->GetHealth() < 2)
-		{
-			m_LevelObjects[i]->ChangeTexture({ 0.5f, 0.0f }, { 0.5f, 1.0f });
-		}
-	}
-
 }
 
-void CGame::Render()
+void CGame::Render(int levelNum)
 {
 	m_background->Render(CCameraManager::GetInstance().GetOrthoCam());
 
 	m_slingShotObjectBack->Render(CCameraManager::GetInstance().GetOrthoCam());
-
-
 	for (CBox2DObject* x: m_boundsObjects)
 	{
 		x->Render(CCameraManager::GetInstance().GetOrthoCam());
 	}
 
-	for (CBox2DObject* x : m_LevelObjects)
+	for (CBox2DObject* x : m_levels[levelNum].objects)
 	{
 		x->Render(CCameraManager::GetInstance().GetOrthoCam());
 	}
-	for (CBox2DObject* x : m_pigs)
+	for (CBox2DObject* x : m_levels[levelNum].enemies)
+	{
+		x->Render(CCameraManager::GetInstance().GetOrthoCam());
+	}
+	for (CBox2DObject* x : m_levels[levelNum].birds)
 	{
 		x->Render(CCameraManager::GetInstance().GetOrthoCam());
 	}
 
-	ThrownObj->Render(CCameraManager::GetInstance().GetOrthoCam());
 	m_slingShotObjectFront->Render(CCameraManager::GetInstance().GetOrthoCam());
 
 }

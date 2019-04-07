@@ -1,7 +1,8 @@
-﻿  game.cpp
-c:\users\jack\documents\github\physics2dframework\opengl-framework\game.cpp(200): warning C4018: '<': signed/unsigned mismatch
-c:\users\jack\documents\github\physics2dframework\opengl-framework\game.cpp(210): warning C4018: '<': signed/unsigned mismatch
-c:\users\jack\documents\github\physics2dframework\opengl-framework\game.cpp(227): warning C4018: '<': signed/unsigned mismatch
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (OpenGL-Framework.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  game.cpp
+c:\users\jack\documents\github\physics2dframework\opengl-framework\game.cpp(240): warning C4018: '<': signed/unsigned mismatch
+c:\users\jack\documents\github\physics2dframework\opengl-framework\game.cpp(296): warning C4018: '<': signed/unsigned mismatch
+c:\users\jack\documents\github\physics2dframework\opengl-framework\game.cpp(313): warning C4018: '<': signed/unsigned mismatch
   SOIL.lib(SOIL.obj) : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
@@ -56,4 +57,4 @@ Box2D.lib(b2Fixture.obj) : warning LNK4099: PDB 'Box2D.pdb' was not found with '
 Box2D.lib(b2Island.obj) : warning LNK4099: PDB 'Box2D.pdb' was not found with 'Box2D.lib(b2Island.obj)' or at 'C:\Users\Jack\Documents\GitHub\Physics2DFramework\Debug\Box2D.pdb'; linking object as if no debug info
 Box2D.lib(b2World.obj) : warning LNK4099: PDB 'Box2D.pdb' was not found with 'Box2D.lib(b2World.obj)' or at 'C:\Users\Jack\Documents\GitHub\Physics2DFramework\Debug\Box2D.pdb'; linking object as if no debug info
 Box2D.lib(b2WorldCallbacks.obj) : warning LNK4099: PDB 'Box2D.pdb' was not found with 'Box2D.lib(b2WorldCallbacks.obj)' or at 'C:\Users\Jack\Documents\GitHub\Physics2DFramework\Debug\Box2D.pdb'; linking object as if no debug info
-  OpenGL-Framework.vcxproj -> C:\Users\Jack\Documents\GitHub\Physics2DFramework\Debug\OpenGL-Framework.exe
+  OpenGL-Framework.vcxproj -> C:\Users\Jack\Documents\GitHub\Physics2DFramework\Debug\OpenGL-Framework - Physics.exe
