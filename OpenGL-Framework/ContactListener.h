@@ -38,8 +38,8 @@ class CB2DListener : public b2ContactListener
 		glm::vec3 velB3 = { velB.x, velB.y, 0.0f };
 		float speedB = glm::length(velB3);
 
-		if (fixtureA->m_Dynamic)
-		{
+		/*if (fixtureA->m_Dynamic)
+		{*/
 			int aHealth = fixtureA->GetHealth();
 			if (speedB > topBracket)
 			{
@@ -67,10 +67,10 @@ class CB2DListener : public b2ContactListener
 			{
 				fixtureA->SetHealth(aHealth - 1);
 			}
-		}
+		//}
 
-		if (fixtureB->m_Dynamic)
-		{
+		/*if (fixtureB->m_Dynamic)
+		{*/
 			int bHealth = fixtureB->GetHealth();
 			if (speedA > topBracket)
 			{
@@ -99,16 +99,16 @@ class CB2DListener : public b2ContactListener
 				fixtureB->SetHealth(bHealth - 1);
 			}
 
-		}
+		//}
 	}
 	void EndContact(b2Contact* contact)
 	{
 
 	}
 private:
-	const int topBracket = 200;
-	const int midBracket = 75;
-	const int lowBracket = 20;
+	const int topBracket = 100;
+	const int midBracket = 50;
+	const int lowBracket = 10;
 };
 
 #endif

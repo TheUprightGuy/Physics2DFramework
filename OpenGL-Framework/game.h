@@ -12,9 +12,12 @@
 
 struct Lvl
 {
+	b2World * world;
+	CB2DListener* listener;
 	std::vector<CBox2DObject*> objects;
 	std::vector<CBox2DObject*> enemies;
 	std::vector<CBox2DObject*> birds;
+	std::vector<CBox2DObject*> boundsObjects;
 	std::vector<b2Joint*> joints;
 };
 
@@ -24,14 +27,23 @@ public:
 	CGame();
 	~CGame();
 
+
+	void InitLvl1(b2World * _world);
+	void InitLvl2(b2World * _world);
+
+	void ResetLvl(int _lvl);
+
 	void Init();
-	void Process(int levelNum);
+	bool Process(int levelNum);
 	void Render(int levelNum);
 
 	glm::vec3 GetMouse();
 	b2Vec2 GetSlingForce(glm::vec3 _pointA, glm::vec3 _pointB, float _springRetension);
 	
 	void ProcessCollisions(b2Contact* _contact);
+
+	//0 = pigs, 1 = birds;
+	bool GetWinner() { return(m_winner); }
 private:
 	b2World * m_world;
 	CB2DListener * m_listener;
@@ -40,19 +52,15 @@ private:
 
 	std::vector<CBox2DObject*> m_boundsObjects;
 
-	std::vector<CBox2DObject*> m_LevelObjects;
-	std::vector<CBox2DObject*> m_pigs;
-	CBox2DObject * ThrownObj;
-
 	std::vector<Lvl> m_levels;
 
 	CAudioManager* m_audio;
 
 	int m_CurrentBird;
-
+	bool m_winner;
 	CObject * m_slingShotObjectBack;
 	CObject * m_slingShotObjectFront;
-	CObject * m_background;
+
 };
 
 #endif

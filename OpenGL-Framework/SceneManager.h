@@ -51,13 +51,24 @@ private:
 	//Variables
 	GLuint m_program;
 
+	std::vector<CObject*> m_menu;
+
+	bool gamePlaying;
+
+	bool m_bLevelSelect;
+	int m_iCurrentSelected;
+	int m_iLevel;
+
+	CObject * m_background;
+	CObject * m_title;
+
+	CGame * m_MainGame;
 	//Global input
 	CInput* m_pInput;
 
 	//Global Camera
 	CCamera* m_pCamera;
 
-	CGame* m_mainGame;
 };
 
 #endif // !__SCENEMANAGER_H__

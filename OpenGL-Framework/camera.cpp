@@ -11,6 +11,7 @@ CCamera::CCamera(bool bIsOrtho)
 
 	GLfloat fWidth = (GLfloat)glutGet(GLUT_WINDOW_WIDTH);
 	GLfloat fHeight = (GLfloat)glutGet(GLUT_WINDOW_HEIGHT);
+
 	if (bIsOrtho)
 	{
 		m_Proj = glm::ortho(0.0f, 100.0f, 0.0f, 50.0f);

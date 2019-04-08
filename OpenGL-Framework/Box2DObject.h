@@ -32,7 +32,9 @@ public:
 
 	void SetPos(b2Vec2 NewPos);
 	b2Vec2 GetPos() { return(m_body->GetPosition()); }
-	
+
+	void SetRotation(float _degrees);
+	float GetRotation() { return(glm::degrees(m_body->GetAngle())); }
 	int GetHealth() { return(m_iHealth); }
 	void SetHealth(int _iHealth) { m_iHealth = _iHealth; }
 	

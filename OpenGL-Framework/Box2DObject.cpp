@@ -61,6 +61,11 @@ void CBox2DObject::SetPos(b2Vec2 NewPos)
 	m_objPosition = glm::vec3( NewPos.x, NewPos.y, 0.0f );
 }
 
+void CBox2DObject::SetRotation(float _degrees)
+{
+	m_body->SetTransform(m_body->GetPosition(), glm::radians(_degrees));
+}
+
 CBox2DObject::~CBox2DObject()
 {
 	std::cout << "destroyed" << std::endl;
