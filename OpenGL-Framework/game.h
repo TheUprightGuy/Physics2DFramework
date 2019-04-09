@@ -30,6 +30,7 @@ public:
 
 	void InitLvl1(b2World * _world);
 	void InitLvl2(b2World * _world);
+	void InitLvl3(b2World * _world);
 
 	void ResetLvl(int _lvl);
 

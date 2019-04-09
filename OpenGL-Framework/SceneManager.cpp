@@ -34,9 +34,9 @@ void CSceneManager::Init()
 	m_MainGame = new CGame();
 	m_MainGame->Init();
 
-	gamePlaying = false;
+	gamePlaying = true;
 	m_bLevelSelect = false;
-	m_iLevel = 0;
+	m_iLevel = 2;
 
 
 	m_background = new CObject(CProgrammerManager::GetInstance().GetProgram(DEFAULT), "Resources/BaCKgROUND.png", MESH_2D_SPRITE);
@@ -139,6 +139,7 @@ void CSceneManager::Process()
 
 			float fMouseX = CInput::GetInstance().GetMousePos().x / (fWidth / 100);
 			float fMouseY = CInput::GetInstance().GetMousePos().y / (fHeight / 50);
+
 			fMouseY = 50 - fMouseY;
 
 			if ((i->GetPos().x + i->GetScale().x > fMouseX) && 

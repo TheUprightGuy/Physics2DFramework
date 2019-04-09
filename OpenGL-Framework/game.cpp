@@ -112,18 +112,21 @@ void CGame::InitLvl1(b2World * _world)
 	bird->SetBirdType(NORMAL);
 	levelOne.birds.push_back(bird);
 	bird = nullptr;
+
 	bird = new CBox2DObject(levelOne.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird2.png", { 16.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
 	bird->SetBirdType(SPLITTER);
 	levelOne.birds.push_back(bird);
 	bird = nullptr;
+
 	bird = new CBox2DObject(levelOne.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 12.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
 	bird->SetBirdType(SPEEDER);
 	levelOne.birds.push_back(bird);
 	bird = nullptr;
+
 	b2FixtureDef fixtureDef;
 
 	CBox2DObject* groundObj = new CBox2DObject(levelOne.world, BOX, fixtureDef, false, "Resources/groundobj.jpg", { 50.0f, -5.0f }, { 50.0f, 10.0f });
@@ -304,6 +307,192 @@ void CGame::InitLvl2(b2World * _world)
 	m_levels[1] = levelTwo;
 }
 
+void CGame::InitLvl3(b2World * _world)
+{
+	Lvl levelTree;
+	levelTree.world = _world;
+	levelTree.listener = new CB2DListener();
+	_world->SetContactListener(levelTree.listener);
+
+
+	
+	//Enviroment
+	/***************************************************************************************************/
+	b2FixtureDef enviroFixture;
+	enviroFixture.density = 50.0f;
+	enviroFixture.friction = 0.5f;
+	enviroFixture.restitution = 0.0f;
+
+	b2WeldJointDef weldJointDef1; //Weld Joint
+	weldJointDef1.collideConnected = false;
+
+	b2WeldJointDef weldJointDef2; //Weld Joint
+	weldJointDef2.collideConnected = false;
+
+	b2WheelJointDef wheelJointDef1; //wheel joint
+	wheelJointDef1.collideConnected = false;
+	wheelJointDef1.frequencyHz = 50000;
+	wheelJointDef1.enableMotor = true;
+
+	b2WheelJointDef wheelJointDef2;//wheel joint
+	wheelJointDef2.collideConnected = false;
+	wheelJointDef2.frequencyHz = 50000;
+	wheelJointDef2.enableMotor = true;
+	//Platform Box
+	CBox2DObject* tempObj = new CBox2DObject(levelTree.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 75.0f, 12.0f }, { 15.0f, 1.0f });
+	tempObj->SetHealth(10);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+
+	//Welds
+	weldJointDef1.bodyA = tempObj->GetBody(); //Weld Def 1
+	weldJointDef1.localAnchorA = { -10, 0 };
+
+	weldJointDef2.bodyA = tempObj->GetBody(); //Weld Def 2
+	weldJointDef2.localAnchorA = { 10, 0 };
+
+	//Wheels
+	wheelJointDef1.bodyA = tempObj->GetBody();
+	wheelJointDef1.localAnchorA = { -10, -4 };
+	wheelJointDef1.localAxisA = { 0, 1 };
+
+	wheelJointDef2.bodyA = tempObj->GetBody();
+	wheelJointDef2.localAnchorA = { 10, -4 };
+	wheelJointDef2.localAxisA = { 0, 1 };
+
+	levelTree.objects.push_back(tempObj);
+	tempObj = nullptr;
+
+	//Left Wheel
+	tempObj = new CBox2DObject(levelTree.world, CIRCLE, enviroFixture, true, "Resources/boulder.png", { 65.0f, 10.0f }, { 3.0f, 3.0f });
+	tempObj->SetHealth(99);
+	wheelJointDef1.bodyB = tempObj->GetBody();
+	wheelJointDef1.localAnchorB = { 0, 0 };
+	levelTree.objects.push_back(tempObj);
+	tempObj = nullptr;
+	
+	//Right Wheel
+	enviroFixture.density = 70.0f;
+	tempObj = new CBox2DObject(levelTree.world, CIRCLE, enviroFixture, true, "Resources/boulder.png", { 85.0f, 10.0f }, { 3.0f, 3.0f });
+	tempObj->SetHealth(99);
+	wheelJointDef2.bodyB = tempObj->GetBody();
+	wheelJointDef2.localAnchorB = { 0, 0 };
+
+	levelTree.objects.push_back(tempObj);
+	tempObj = nullptr;
+
+
+	tempObj = new CBox2DObject(levelTree.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 65.0f, 20.0f }, { 1.0f, 7.0f });
+	tempObj->SetHealth(10);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+
+	weldJointDef1.bodyB = tempObj->GetBody(); //Weld Def 1
+	weldJointDef1.localAnchorB = {0.0f, -5.0f};
+
+	levelTree.objects.push_back(tempObj);
+	tempObj = nullptr;
+
+	tempObj = new CBox2DObject(levelTree.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 85.0f, 20.0f }, { 1.0f, 7.0f });
+	tempObj->SetHealth(10);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+
+	weldJointDef2.bodyB = tempObj->GetBody(); //Weld Def 2
+	weldJointDef2.localAnchorB = { 0.0f, -5.0f };
+
+	levelTree.objects.push_back(tempObj);
+	tempObj = nullptr;
+
+	//Right box
+	 tempObj = new CBox2DObject(levelTree.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 77.0f, 14.5f }, { 1.5f, 1.5f });
+	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+	levelTree.objects.push_back(tempObj);
+	tempObj = nullptr;
+
+	//Left box
+	tempObj = new CBox2DObject(levelTree.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 73.0f, 14.5f }, { 1.5f, 1.5f });
+	tempObj->SetHealth(3);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+	levelTree.objects.push_back(tempObj);
+	tempObj = nullptr;
+
+	//Pigs
+	/***************************************************************************************************/
+	b2FixtureDef PigObjfixtureDef;
+	PigObjfixtureDef.density = 90.0f;
+	PigObjfixtureDef.friction = 0.7f;
+	PigObjfixtureDef.restitution = 0.1f;
+
+	CBox2DObject* PigObj = new CBox2DObject(levelTree.world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", { 75.0f, 14.5f }, { 1.8f, 1.8f });
+	PigObj->SetHealth(2);
+	//PigObj->GetBody()->SetActive(false);
+	levelTree.enemies.push_back(PigObj);
+	PigObj = nullptr;
+
+	PigObj = new CBox2DObject(levelTree.world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", { 70.0f, 14.5f }, { 1.8f, 1.8f });
+	PigObj->SetHealth(2);
+	//PigObj->GetBody()->SetActive(false);
+	levelTree.enemies.push_back(PigObj);
+	PigObj = nullptr;
+
+	PigObj = new CBox2DObject(levelTree.world, CIRCLE, PigObjfixtureDef, true, "Resources/Pig.png", { 80.0f, 14.5f }, { 1.8f, 1.8f });
+	PigObj->SetHealth(2);
+	//PigObj->GetBody()->SetActive(false);
+	levelTree.enemies.push_back(PigObj);
+	PigObj = nullptr;
+
+	//birds
+	/***************************************************************************************************/
+
+	b2FixtureDef thrownObjfixtureDef;
+	thrownObjfixtureDef.density = 80.0f;
+	thrownObjfixtureDef.friction = 1.0f;
+	thrownObjfixtureDef.restitution = 0.2f;
+
+	CBox2DObject* bird = new CBox2DObject(levelTree.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird.png", slingFromPoint, { 2.0f, 2.0f });
+	bird->GetBody()->SetActive(false);
+	bird->SetHealth(999);
+	bird->SetBirdType(NORMAL);
+	levelTree.birds.push_back(bird);
+	bird = nullptr;
+
+	bird = new CBox2DObject(levelTree.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird2.png", { 16.0f, 6.5f }, { 2.0f, 2.0f });
+	bird->GetBody()->SetActive(false);
+	bird->SetHealth(999);
+	bird->SetBirdType(SPLITTER);
+	levelTree.birds.push_back(bird);
+	bird = nullptr;
+
+	bird = new CBox2DObject(levelTree.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 12.0f, 6.5f }, { 2.0f, 2.0f });
+	bird->GetBody()->SetActive(false);
+	bird->SetHealth(999);
+	bird->SetBirdType(SPEEDER);
+	levelTree.birds.push_back(bird);
+	bird = nullptr;
+
+	b2FixtureDef fixtureDef;
+
+	CBox2DObject* groundObj = new CBox2DObject(levelTree.world, BOX, fixtureDef, false, "Resources/groundobj.jpg", { 50.0f, -5.0f }, { 50.0f, 10.0f });
+	CBox2DObject* leftObj = new CBox2DObject(levelTree.world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { -1.0f, 50.0f }, { 1.0f, 100.0f });
+	CBox2DObject* topObj = new CBox2DObject(levelTree.world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 50.0f, 51.0f }, { 100.0f, 1.0f });
+	CBox2DObject* rightObj = new CBox2DObject(levelTree.world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 101.0f, 50.0f }, { 1.0f, 100.0f });
+	CBox2DObject* barrierObj = new CBox2DObject(levelTree.world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 50.0f, 6.0f }, { 2.0f, 2.0f });
+	barrierObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+
+	levelTree.boundsObjects.push_back(groundObj);
+	levelTree.boundsObjects.push_back(leftObj);
+	levelTree.boundsObjects.push_back(topObj);
+	levelTree.boundsObjects.push_back(rightObj);
+	levelTree.boundsObjects.push_back(barrierObj);
+
+
+	levelTree.joints.push_back(levelTree.world->CreateJoint(&weldJointDef1));
+	levelTree.joints.push_back(levelTree.world->CreateJoint(&weldJointDef2));
+	levelTree.joints.push_back(levelTree.world->CreateJoint(&wheelJointDef1));
+	levelTree.joints.push_back(levelTree.world->CreateJoint(&wheelJointDef2));
+	m_levels[2] = levelTree;
+
+}
+
 void CGame::ResetLvl(int _lvl)
 {
 	int size = m_levels[_lvl].objects.size();
@@ -376,6 +565,7 @@ void CGame::Init()
 
 	InitLvl1(new b2World(grav));
 	InitLvl2(new b2World(grav));
+	InitLvl3(new b2World(grav));
 
 	//m_levels.resize(3);
 }
