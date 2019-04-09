@@ -34,9 +34,9 @@ void CSceneManager::Init()
 	m_MainGame = new CGame();
 	m_MainGame->Init();
 
-	gamePlaying = true;
+	gamePlaying = false;
 	m_bLevelSelect = false;
-	m_iLevel = 2;
+	m_iLevel = 0;
 
 
 	m_background = new CObject(CProgrammerManager::GetInstance().GetProgram(DEFAULT), "Resources/BaCKgROUND.png", MESH_2D_SPRITE);
@@ -78,7 +78,7 @@ void CSceneManager::Init()
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 1.0f, 0.5f });
 	m_menu.push_back(tempObj);
 
-	tempObj = new CObject(m_program, "Resources/green_panel.png", MESH_2D_SPRITE);
+	tempObj = new CObject(m_program, "Resources/green_panel_lvl3.png", MESH_2D_SPRITE);
 	tempObj->Translate({ 90.0f, 25.0f, 0.0f });
 	tempObj->Scale({ 9.0f, 12.0f, 0.0f });
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 1.0f, 0.5f });
@@ -188,19 +188,33 @@ void CSceneManager::Process()
 			}
 			case 3:
 			{
-				m_iLevel = 0;
-				gamePlaying = true;
-				break;
+				if (m_bLevelSelect)
+				{
+					m_iLevel = 0;
+					gamePlaying = true;
+					break;
+				}
+				
 			}
 			case 4:
 			{
-				m_iLevel = 1;
-				gamePlaying = true;
-				break;
+				if (m_bLevelSelect)
+				{
+					m_iLevel = 1;
+					gamePlaying = true;
+					break;
+				}
+				
 			}
 			case 5:
 			{
-				break;
+				if (m_bLevelSelect)
+				{
+					m_iLevel = 2;
+					gamePlaying = true;
+					break;
+				}
+				
 			}
 			default:
 				break;

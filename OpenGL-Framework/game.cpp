@@ -271,21 +271,21 @@ void CGame::InitLvl2(b2World * _world)
 	bird = new CBox2DObject(levelTwo.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 16.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
-	bird->SetBirdType(SPEEDER);
+	bird->SetBirdType(SPLITTER);
 	levelTwo.birds.push_back(bird);
 	bird = nullptr;
 
 	bird = new CBox2DObject(levelTwo.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 12.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
-	bird->SetBirdType(SPEEDER);
+	bird->SetBirdType(SPLITTER);
 	levelTwo.birds.push_back(bird);
 	bird = nullptr;
 
 	bird = new CBox2DObject(levelTwo.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 8.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
-	bird->SetBirdType(SPEEDER);
+	bird->SetBirdType(SPLITTER);
 	levelTwo.birds.push_back(bird);
 	bird = nullptr;
 
@@ -340,7 +340,7 @@ void CGame::InitLvl3(b2World * _world)
 	wheelJointDef2.enableMotor = true;
 	//Platform Box
 	CBox2DObject* tempObj = new CBox2DObject(levelTree.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 75.0f, 12.0f }, { 15.0f, 1.0f });
-	tempObj->SetHealth(10);
+	tempObj->SetHealth(7);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 
 	//Welds
@@ -381,8 +381,8 @@ void CGame::InitLvl3(b2World * _world)
 	tempObj = nullptr;
 
 
-	tempObj = new CBox2DObject(levelTree.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 65.0f, 20.0f }, { 1.0f, 7.0f });
-	tempObj->SetHealth(10);
+	tempObj = new CBox2DObject(levelTree.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 65.0f, 18.0f }, { 1.0f, 5.0f });
+	tempObj->SetHealth(7);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 
 	weldJointDef1.bodyB = tempObj->GetBody(); //Weld Def 1
@@ -392,7 +392,7 @@ void CGame::InitLvl3(b2World * _world)
 	tempObj = nullptr;
 
 	tempObj = new CBox2DObject(levelTree.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 85.0f, 20.0f }, { 1.0f, 7.0f });
-	tempObj->SetHealth(10);
+	tempObj->SetHealth(7);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 
 	weldJointDef2.bodyB = tempObj->GetBody(); //Weld Def 2
@@ -455,14 +455,21 @@ void CGame::InitLvl3(b2World * _world)
 	levelTree.birds.push_back(bird);
 	bird = nullptr;
 
-	bird = new CBox2DObject(levelTree.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird2.png", { 16.0f, 6.5f }, { 2.0f, 2.0f });
+	bird = new CBox2DObject(levelTree.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 16.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
-	bird->SetBirdType(SPLITTER);
+	bird->SetBirdType(SPEEDER);
 	levelTree.birds.push_back(bird);
 	bird = nullptr;
 
 	bird = new CBox2DObject(levelTree.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 12.0f, 6.5f }, { 2.0f, 2.0f });
+	bird->GetBody()->SetActive(false);
+	bird->SetHealth(999);
+	bird->SetBirdType(SPEEDER);
+	levelTree.birds.push_back(bird);
+	bird = nullptr;
+
+	bird = new CBox2DObject(levelTree.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 8.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
 	bird->SetBirdType(SPEEDER);
@@ -533,6 +540,11 @@ void CGame::ResetLvl(int _lvl)
 	case 1:
 	{
 		InitLvl2(m_levels[_lvl].world);
+		break;
+	}
+	case 2:
+	{
+		InitLvl3(m_levels[_lvl].world);
 		break;
 	}
 	default:
