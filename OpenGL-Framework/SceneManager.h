@@ -81,8 +81,8 @@ private:
 	CObject * m_RedPanel;
 	CObject * m_BackPanel;
 
-	CObject * m_pig;
-	CObject * m_bird;
+	CObject * m_birds;
+	CObject * m_pigs;
 
 	CGame * m_MainGame;
 	//Global input

@@ -35,7 +35,7 @@ void CGame::InitLvl1(b2World * _world)
 	tempObj = nullptr;
 
 	//Left box
-	enviroFixture.density = 70.0f;
+	enviroFixture.density = 300.0f;
 	tempObj = new CBox2DObject(levelOne.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 70.0f, 20.0f }, { 2.0f, 2.0f });
 	tempObj->SetHealth(3);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
@@ -43,7 +43,6 @@ void CGame::InitLvl1(b2World * _world)
 	tempObj = nullptr;
 
 	//Pillar box
-	enviroFixture.density = 30.0f;
 	tempObj = new CBox2DObject(levelOne.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 10.0f }, { 1.5f, 7.0f });
 	tempObj->SetHealth(3);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
@@ -55,6 +54,7 @@ void CGame::InitLvl1(b2World * _world)
 	tempObj = nullptr;
 
 	//Platform Box
+	enviroFixture.density = 30.0f;
 	tempObj = new CBox2DObject(levelOne.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 80.0f, 17.5f }, { 15.0f, 1.0f });
 	tempObj->SetHealth(3);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
@@ -67,15 +67,19 @@ void CGame::InitLvl1(b2World * _world)
 
 	levelOne.joints.push_back(levelOne.world->CreateJoint(&revoluteJointDef));
 
+	 //Left Pillar
+	tempObj = new CBox2DObject(levelOne.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 70.0f, 9.0f }, { 1.5f, 5.5f });
+	tempObj->SetHealth(4);
+	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
+	levelOne.objects.push_back(tempObj);
+
+	//Right Pillar
 	tempObj = new CBox2DObject(levelOne.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 90.0f, 9.0f }, { 1.5f, 5.5f });
 	tempObj->SetHealth(2);
 	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
 	levelOne.objects.push_back(tempObj);
 
-	tempObj = new CBox2DObject(levelOne.world, BOX, enviroFixture, true, "Resources/boxEmpty.png", { 70.0f, 9.0f }, { 1.5f, 5.5f });
-	tempObj->SetHealth(3);
-	tempObj->ChangeTexture({ 0.0f, 0.0f }, { 0.5f, 1.0f });
-	levelOne.objects.push_back(tempObj);
+	
 
 
 	b2FixtureDef PigObjfixtureDef;

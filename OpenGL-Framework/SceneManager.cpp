@@ -126,9 +126,9 @@ void CSceneManager::Init()
 
 	/*Mid Game Menus*/
 	/********************************************************************************/ //Win Menu
-	m_bird = new CObject(m_program, "Resources/pig.png", MESH_2D_SPRITE);
-	m_bird->Translate({ 50.0f, 38.0f, 0.0f });
-	m_bird->Scale({ 5.0f, 5.0f, 0.0f });
+	m_pigs = new CObject(m_program, "Resources/pig.png", MESH_2D_SPRITE);
+	m_pigs->Translate({ 50.0f, 38.0f, 0.0f });
+	m_pigs->Scale({ 5.0f, 5.0f, 0.0f });
 
 
 	tempObj = new CObject(m_program, "Resources/green_button_next.png", MESH_2D_SPRITE);
@@ -154,9 +154,9 @@ void CSceneManager::Init()
 
 	/*Mid Game Menus*/
 	/********************************************************************************/ //Lose Menu
-	m_pig = new CObject(m_program, "Resources/bird.png", MESH_2D_SPRITE);
-	m_pig->Translate({ 50.0f, 38.0f, 0.0f });
-	m_pig->Scale({ 5.0f, 5.0f, 0.0f });
+	m_birds = new CObject(m_program, "Resources/bird.png", MESH_2D_SPRITE);
+	m_birds->Translate({ 50.0f, 38.0f, 0.0f });
+	m_birds->Scale({ 5.0f, 5.0f, 0.0f });
 
 	tempObj = new CObject(m_program, "Resources/green_button_retry.png", MESH_2D_SPRITE);
 	tempObj->Translate({ 50.0f, 28.0f, 0.0f });
@@ -199,15 +199,15 @@ void CSceneManager::Render()
 					x->Render(CCameraManager::GetInstance().GetOrthoCam());
 				}
 				break;
-			case LOSER:
-				m_pig->Render(CCameraManager::GetInstance().GetOrthoCam());
+			case WINNER:
+				m_birds->Render(CCameraManager::GetInstance().GetOrthoCam());
 				for (CObject* x : m_winmenu)
 				{
 					x->Render(CCameraManager::GetInstance().GetOrthoCam());
 				}
 				break;
-			case WINNER:
-				m_bird->Render(CCameraManager::GetInstance().GetOrthoCam());
+			case LOSER:
+				m_pigs->Render(CCameraManager::GetInstance().GetOrthoCam());
 				for (CObject* x : m_losemenu)
 				{
 					
@@ -253,6 +253,7 @@ void CSceneManager::Process()
 		{
 			int iCount = 0;
 			bool bSelected = false;
+			bSelected = false;
 
 			switch (m_menuType)
 			{
@@ -296,8 +297,10 @@ void CSceneManager::Process()
 
 				break;
 			}
-			case LOSER:
+			case WINNER:
 			{
+				//Menu Things
+				/**************************************************/
 				for (CObject* i : m_winmenu)
 				{
 					float fWidth = (GLfloat)glutGet(GLUT_WINDOW_WIDTH);
@@ -319,6 +322,7 @@ void CSceneManager::Process()
 
 					iCount++;
 				}
+
 				if (!bSelected)
 				{
 					for (CObject* x : m_winmenu)
@@ -333,8 +337,10 @@ void CSceneManager::Process()
 
 				break;
 			}
-			case WINNER:
+			case LOSER:
 			{
+				//Menu Things
+				/**************************************************/
 				for (CObject* i : m_losemenu)
 				{
 					float fWidth = (GLfloat)glutGet(GLUT_WINDOW_WIDTH);
@@ -383,35 +389,25 @@ void CSceneManager::Process()
 				{
 				case 0:
 				{
-					if (m_menuType == PAUSED)
+					if (m_menuType == WINNER)
 					{
-						m_bPaused = false;
-					}
-					else 
-					{
-						if (m_menuType == LOSER)
+						m_MainGame->ResetLvl(m_iLevel);
+						if (m_iLevel == 2)
 						{
-							m_MainGame->ResetLvl(m_iLevel);
-							if (m_iLevel == 3)
-							{
-								m_iLevel = 0;
-							}
-							else
-							{
-								m_iLevel++;
-							}
-						
-
-							m_bPaused = false;
+							m_iLevel = 0;
 						}
 						else
 						{
-							m_MainGame->ResetLvl(m_iLevel);
-							m_bPaused = false;
+							m_iLevel++;
 						}
 					}
+					else if(m_menuType == LOSER)
+					{
+						m_MainGame->ResetLvl(m_iLevel);
+					}
 
-
+					m_bPaused = false;
+					m_menuType = PAUSED;
 					break;
 				}
 				case 1:
@@ -439,7 +435,7 @@ void CSceneManager::Process()
 		}
 		else if (m_MainGame->Process(m_iLevel))
 		{
-			m_menuType = (m_MainGame->GetWinner()) ? WINNER : LOSER;
+			m_menuType = (m_MainGame->GetWinner()) ? LOSER : WINNER;
 			m_bPaused = true;
 		
 		}

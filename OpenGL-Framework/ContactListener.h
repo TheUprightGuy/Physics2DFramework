@@ -106,9 +106,9 @@ class CB2DListener : public b2ContactListener
 
 	}
 private:
-	const int topBracket = 100;
-	const int midBracket = 50;
-	const int lowBracket = 10;
+	const int topBracket = 125;
+	const int midBracket = 75;
+	const int lowBracket = 25;
 };
 
 #endif
