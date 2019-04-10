@@ -26,6 +26,14 @@ struct Scene
 	std::vector<TextLabel*> Texts;
 	CAudioManager* AudioManager;
 };
+
+enum MENUTYPE
+{
+	PAUSED,
+	LOSER,
+	WINNER
+};
+
 class CSceneManager
 {
 public:
@@ -52,15 +60,29 @@ private:
 	GLuint m_program;
 
 	std::vector<CObject*> m_menu;
+	std::vector<CObject*> m_pausemenu;
+	std::vector<CObject*> m_winmenu;
+	std::vector<CObject*> m_losemenu;
 
 	bool gamePlaying;
+	bool m_bPaused;
+	bool m_bGameOver;
 
+	bool m_bWinner;
 	bool m_bLevelSelect;
+
 	int m_iCurrentSelected;
 	int m_iLevel;
-
+	
+	MENUTYPE m_menuType;
 	CObject * m_background;
 	CObject * m_title;
+
+	CObject * m_RedPanel;
+	CObject * m_BackPanel;
+
+	CObject * m_pig;
+	CObject * m_bird;
 
 	CGame * m_MainGame;
 	//Global input

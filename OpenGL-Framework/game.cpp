@@ -268,21 +268,21 @@ void CGame::InitLvl2(b2World * _world)
 	levelTwo.birds.push_back(bird);
 
 	bird = nullptr;
-	bird = new CBox2DObject(levelTwo.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 16.0f, 6.5f }, { 2.0f, 2.0f });
+	bird = new CBox2DObject(levelTwo.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird2.png", { 16.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
 	bird->SetBirdType(SPLITTER);
 	levelTwo.birds.push_back(bird);
 	bird = nullptr;
 
-	bird = new CBox2DObject(levelTwo.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 12.0f, 6.5f }, { 2.0f, 2.0f });
+	bird = new CBox2DObject(levelTwo.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird2.png", { 12.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
 	bird->SetBirdType(SPLITTER);
 	levelTwo.birds.push_back(bird);
 	bird = nullptr;
 
-	bird = new CBox2DObject(levelTwo.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird1.png", { 8.0f, 6.5f }, { 2.0f, 2.0f });
+	bird = new CBox2DObject(levelTwo.world, CIRCLE, thrownObjfixtureDef, true, "Resources/bird2.png", { 8.0f, 6.5f }, { 2.0f, 2.0f });
 	bird->GetBody()->SetActive(false);
 	bird->SetHealth(999);
 	bird->SetBirdType(SPLITTER);
@@ -656,11 +656,6 @@ bool CGame::Process(int levelNum)
 		{
 			m_CurrentBird++;
 
-			while (m_levels[levelNum].birds[m_CurrentBird]->GetBirdType() == MINI_SPLITTER)
-			{
-				m_CurrentBird++;
-			}
-
 			m_levels[levelNum].birds[m_CurrentBird]->SetPos(slingFromPoint);
 			fired = false;
 			birdAbility = false;
@@ -710,6 +705,7 @@ bool CGame::Process(int levelNum)
 			m_levels[levelNum].birds.insert(m_levels[levelNum].birds.begin() + m_CurrentBird, bird2);
 			m_levels[levelNum].birds.insert(m_levels[levelNum].birds.begin() + m_CurrentBird, bird3);
 
+			m_CurrentBird += 2;
 			birdAbility = true;
 		}
 	}
