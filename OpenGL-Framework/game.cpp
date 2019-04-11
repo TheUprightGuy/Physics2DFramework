@@ -132,6 +132,7 @@ void CGame::InitLvl1(b2World * _world)
 	bird = nullptr;
 
 	b2FixtureDef fixtureDef;
+	fixtureDef.friction = 1.0f;
 
 	CBox2DObject* groundObj = new CBox2DObject(levelOne.world, BOX, fixtureDef, false, "Resources/groundobj.jpg", { 50.0f, -5.0f }, { 50.0f, 10.0f });
 	CBox2DObject* leftObj = new CBox2DObject(levelOne.world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { -1.0f, 50.0f }, { 1.0f, 100.0f });
@@ -294,7 +295,7 @@ void CGame::InitLvl2(b2World * _world)
 	bird = nullptr;
 
 	b2FixtureDef fixtureDef;
-
+	fixtureDef.friction = 1.0f;
 	CBox2DObject* groundObj = new CBox2DObject(levelTwo.world, BOX, fixtureDef, false, "Resources/groundobj.jpg", { 50.0f, -5.0f }, { 50.0f, 10.0f });
 	CBox2DObject* leftObj = new CBox2DObject(levelTwo.world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { -1.0f, 50.0f }, { 1.0f, 100.0f });
 	CBox2DObject* topObj = new CBox2DObject(levelTwo.world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { 50.0f, 51.0f }, { 100.0f, 1.0f });
@@ -481,6 +482,7 @@ void CGame::InitLvl3(b2World * _world)
 	bird = nullptr;
 
 	b2FixtureDef fixtureDef;
+	fixtureDef.friction = 1.0f;
 
 	CBox2DObject* groundObj = new CBox2DObject(levelTree.world, BOX, fixtureDef, false, "Resources/groundobj.jpg", { 50.0f, -5.0f }, { 50.0f, 10.0f });
 	CBox2DObject* leftObj = new CBox2DObject(levelTree.world, BOX, fixtureDef, false, "Resources/boxEmpty.png", { -1.0f, 50.0f }, { 1.0f, 100.0f });
